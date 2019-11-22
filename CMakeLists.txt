@@ -15,8 +15,11 @@ endif()
 include_directories(${OGDF_INCLUDE_DIRS} ./include ./src)
 link_libraries(OGDF)
 
-add_library(TSP_DoubleTree ./include/TSP_DoubleTree.h ./src/TSP_DoubleTree.cpp)
+file(GLOB main_SRC
+        "./include/*.h"
+        "./src/*.cpp"
+        )
 
-add_executable(main main.cpp)
+add_executable(main main.cpp ${main_SRC})
 target_include_directories(main PRIVATE ${OGDF_INCLUDE_DIRS} ./include ./src)
-target_link_libraries(main OGDF TSP_DoubleTree)
+target_link_libraries(main OGDF)
