@@ -1,0 +1,10 @@
+*.o
+*.so
+*.a
+main
+build
+ogdf
+cmake*
+CMakeCache.txt
+CMakeFiles
+.idea
