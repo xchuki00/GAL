@@ -7,4 +7,5 @@ ogdf
 cmake*
 CMakeCache.txt
 CMakeFiles
+Makefile
 .idea
