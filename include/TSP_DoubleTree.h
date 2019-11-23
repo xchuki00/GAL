@@ -10,15 +10,26 @@
 #include <ogdf/layered/OptimalHierarchyLayout.h>
 #include <ogdf/layered/OptimalRanking.h>
 #include <ogdf/layered/SugiyamaLayout.h>
-
+#include <fstream>
+#include <ogdf/graphalg/steiner_tree/common_algorithms.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraph.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
+#include <cstdio>
 using namespace ogdf;
 
 class TSP_DoubleTree {
 public:
-    Graph G;
+    EdgeWeightedGraph<float> G;
     GraphAttributes GA;
+    std::vector<node> EC;
+    int MSTIndex = 0;
     TSP_DoubleTree();
     bool load(string filename);
+    bool checkCoherent();
+    void eulerianWalk();
+    void minimumSpanningTree();
+    void doubleTree();
+    void solveTSD();
     bool save(string filename);
 };
 
