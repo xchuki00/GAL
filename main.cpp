@@ -2,13 +2,15 @@
 #include "include/GraphGenerator.h"
 #include "include/TSP_k-OPT.h"
 
-int main()
+int main(int argc, char ** argv)
 {
-	//doplnit zpracovani argumentu
-	
-	int algorithmNumber = 1;
-	
-	if (algorithmNumber == 1)
+    int algorithmNumber = 2;
+    std::string filename(argv[2]);
+    //doplnit zpracovani argumentu
+    std::string s(argv[1]);
+    algorithmNumber = std::stoi(argv[1]);
+
+    if (algorithmNumber == 1)
 	{
 		//doplnit zpracovani a ukladani bodu za pomoci knihovny
 		//kontrola minimalni delky grafu!
