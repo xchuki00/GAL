@@ -84,6 +84,9 @@
 		<Unit filename="/media/patrik/D/FIT/gal/GAL/include/TSP_DoubleTree.h">
 			<Option target="main"/>
 		</Unit>
+		<Unit filename="/media/patrik/D/FIT/gal/GAL/include/TSP_k-OPT.h">
+			<Option target="main"/>
+		</Unit>
 		<Unit filename="/media/patrik/D/FIT/gal/GAL/main.cpp">
 			<Option target="main"/>
 		</Unit>
@@ -91,6 +94,9 @@
 			<Option target="main"/>
 		</Unit>
 		<Unit filename="/media/patrik/D/FIT/gal/GAL/src/TSP_DoubleTree.cpp">
+			<Option target="main"/>
+		</Unit>
+		<Unit filename="/media/patrik/D/FIT/gal/GAL/src/TSP_k-OPT.cpp">
 			<Option target="main"/>
 		</Unit>
 		<Unit filename="/media/patrik/D/FIT/gal/GAL/CMakeLists.txt">

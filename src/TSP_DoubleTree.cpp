@@ -79,10 +79,6 @@ void TSP_DoubleTree::minimumSpanningTree() {
     makeMinimumSpanningTree(this->G, this->G.edgeWeights());
 }
 
-bool TSP_DoubleTree::checkCoherent() {
-    return false;
-}
-
 void TSP_DoubleTree::eulerianWalk() {
     auto A = std::map<int, std::vector<node>>();
     auto I = std::map<int, int>();
