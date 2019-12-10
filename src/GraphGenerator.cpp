@@ -1,5 +1,7 @@
 //
-// Created by patrik on 22.11.19.
+// Created by Patrik Chukir on 10.12.19.
+// xchuki00@stud.fit.vutbr.cz
+// Traveling Salesman Problem - GAL
 //
 
 #include "../include/GraphGenerator.h"
@@ -11,38 +13,39 @@ GraphGenerator::GraphGenerator() {
 
 }
 
-void GraphGenerator::generateCompleteGraph(string fileName,int n,int m) {
+void GraphGenerator::generateCompleteGraph(string fileName, string svgFile, int n) {
     EdgeWeightedGraph<float> G;
 
-    randomSimpleConnectedGraph(G, n, m);
-
+    completeGraph(G, n);
     GraphAttributes GA(G,
                        GraphAttributes::nodeGraphics |
                        GraphAttributes::nodeStyle |
                        GraphAttributes::nodeLabel |
                        GraphAttributes::edgeGraphics |
                        GraphAttributes::edgeStyle |
-                       GraphAttributes::edgeLabel);
+                       GraphAttributes::edgeArrow |
+                       GraphAttributes::edgeLabel |
+                       GraphAttributes::edgeArrow);
 
-    GA.directed() = false;
-
+    GA.directed() = true;
     for (edge e : G.edges) {
         GA.bends(e);
-        int weigth = rand() % 100;
+        int weigth = rand() % 100+100;
         G.setWeight(e, weigth);
         GA.strokeColor(e) = Color::Name::Black;
-        GA.label(e) = to_string((int)G.weight(e));
+        GA.label(e) = to_string((int) G.weight(e));
         GA.strokeWidth(e) = 1;
+        GA.arrowType(e) = EdgeArrow::Last;
     }
 
     for (node v : G.nodes) {
-        GA.fillColor(v) = Color("#FFFF00"); // set node color to yellow
 
-        GA.height(v) = 20.0; // set the height to 20.0
-        GA.width(v) = 20.0; // set the width to 40.0
+//        GA.height(v) = 20.0*n; // set the height to 20.0
+//        GA.width(v) = 20.0*n; // set the width to 40.0
         GA.shape(v) = ogdf::Shape::Ellipse;
         GA.strokeWidth(v) = 1;
         GA.strokeColor(v) = Color::Name::Black;
+        GA.fillColor(v) = Color::Name::Yellow;
 
         GA.label(v) = to_string(v->index());
     }
@@ -63,12 +66,11 @@ void GraphGenerator::generateCompleteGraph(string fileName,int n,int m) {
 
     SL.setLayout(ohl);
     SL.call(GA);
-    std::ofstream gml(fileName+".gml");
-    std::ofstream svg(fileName+".svg");
-
+    std::ofstream gml(fileName);
     GraphIO::writeGML(GA, gml);
-    GraphIO::drawSVG(GA, svg);
-
-
+    if (svgFile.length() > 0) {
+        std::ofstream svg(svgFile);
+        GraphIO::drawSVG(GA, svg);
+    }
 }
 

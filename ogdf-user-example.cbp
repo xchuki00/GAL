@@ -78,6 +78,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/media/patrik/D/FIT/gal/GAL/TSP_ExactAlgorithm.cpp">
+			<Option target="main"/>
+		</Unit>
+		<Unit filename="/media/patrik/D/FIT/gal/GAL/TSP_ExactAlgorithm.h">
+			<Option target="main"/>
+		</Unit>
 		<Unit filename="/media/patrik/D/FIT/gal/GAL/include/GraphGenerator.h">
 			<Option target="main"/>
 		</Unit>

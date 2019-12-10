@@ -1,5 +1,7 @@
 //
-// Created by patrik on 22.11.19.
+// Created by Patrik Chukir on 10.12.19.
+// xchuki00@stud.fit.vutbr.cz
+// Traveling Salesman Problem - GAL
 //
 
 #include "../include/TSP_DoubleTree.h"
@@ -34,15 +36,20 @@ bool TSP_DoubleTree::save(string filename) {
     for (edge e : this->G.edges) {
         this->GA.arrowType(e) = EdgeArrow::Last;
     }
-    std::ofstream svg(filename + ".svg");
-    std::ofstream gml(filename + ".gml");
-
+    std::ofstream gml(filename );
     GraphIO::writeGML(this->GA, gml);
-    GraphIO::drawSVG(this->GA, svg);
-
     return true;
 }
 
+bool TSP_DoubleTree::saveSvg(string filename) {
+    this->GA.directed() = true;
+    for (edge e : this->G.edges) {
+        this->GA.arrowType(e) = EdgeArrow::Last;
+    }
+    std::ofstream svg(filename);
+    GraphIO::drawSVG(this->GA, svg);
+    return true;
+}
 void TSP_DoubleTree::solveTSD() {
     this->minimumSpanningTree();
     this->doubleTree();
@@ -114,3 +121,4 @@ void TSP_DoubleTree::eulerianWalk() {
     std::cout<<"\n";
 
 }
+

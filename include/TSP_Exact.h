@@ -4,8 +4,8 @@
 // Traveling Salesman Problem - GAL
 //
 
-#ifndef GAL_TSP_DOUBLETREE_H
-#define GAL_TSP_DOUBLETREE_H
+#ifndef OGDF_USER_EXAMPLE_TSP_EXACT_H
+#define OGDF_USER_EXAMPLE_TSP_EXACT_H
 
 #include <ogdf/fileformats/GraphIO.h>
 #include <ogdf/layered/MedianHeuristic.h>
@@ -17,24 +17,20 @@
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraph.h>
 #include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
 #include <cstdio>
+
 using namespace ogdf;
 
-class TSP_DoubleTree {
-public:
+class TSP_Exact {
     EdgeWeightedGraph<float> G;
     GraphAttributes GA;
     std::vector<node> EC;
     int MSTIndex = 0;
-    TSP_DoubleTree();
+    TSP_Exact();
     bool load(string filename);
-    void eulerianWalk();
-    void minimumSpanningTree();
-    void doubleTree();
     void solveTSD();
     bool save(string filename);
     bool saveSvg(string filename);
-
 };
 
 
-#endif //GAL_TSP_DOUBLETREE_H
+#endif //OGDF_USER_EXAMPLE_TSP_EXACT_H

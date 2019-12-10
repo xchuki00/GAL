@@ -1,6 +1,9 @@
 //
-// Created by patrik on 22.11.19.
+// Created by Patrik Chukir on 10.12.19.
+// xchuki00@stud.fit.vutbr.cz
+// Traveling Salesman Problem - GAL
 //
+
 
 #ifndef OGDF_USER_EXAMPLE_GRAPHGENERATOR_H
 #define OGDF_USER_EXAMPLE_GRAPHGENERATOR_H
@@ -20,7 +23,7 @@ using namespace ogdf;
 class GraphGenerator {
 public:
     GraphGenerator();
-    void generateCompleteGraph(std::string fileName,int n,int m);
+    void generateCompleteGraph(std::string fileName,string svg,int n);
 };
 
 
