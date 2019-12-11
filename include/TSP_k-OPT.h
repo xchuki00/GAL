@@ -6,15 +6,26 @@
 #include <algorithm>
 #include <cmath>
 
+#include <ogdf/fileformats/GraphIO.h>
+#include <ogdf/layered/MedianHeuristic.h>
+#include <ogdf/layered/OptimalHierarchyLayout.h>
+#include <ogdf/layered/OptimalRanking.h>
+#include <ogdf/layered/SugiyamaLayout.h>
+#include <fstream>
+#include <ogdf/graphalg/steiner_tree/common_algorithms.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraph.h>
+#include <ogdf/graphalg/steiner_tree/EdgeWeightedGraphCopy.h>
+
 using namespace std;
 
 //struktura vrcholu grafu pouzita ve vazanem seznamu
 struct Node
 {
-	double positionX;
-	double positionY;
+	double positionX = 0;
+	double positionY = 0;
 	Node* firstNeighbour;
 	Node* secondNeighbour;
+	int id;
 };
 
 //obousmerne vazany seznam, ktery reprezentuje graf, nema smer - prochazime ho opacnym smerem od predchudce
@@ -23,6 +34,8 @@ class CircularLinkedList
     public:
 		//konctruktor
 		CircularLinkedList();
+		//nacteni grafu ze souboru
+		bool LoadOgdfGraph(string filename);
 		//vlozeni vrcholu
 		void InsertNode(double positionX, double positionY);
 		//vrati pocatecni vrchol
@@ -39,10 +52,13 @@ class CircularLinkedList
 		~CircularLinkedList();
 		
     private:
+		ogdf::GraphAttributes ogdfGraphAttributes;
+		ogdf::EdgeWeightedGraph<float> ogdfEdgeWeightedGraph;
+		
 		//pocatecni uzel
 		Node* startNode;
 		//delka seznamu
-		int listLength;
+		int listLength = 0;
 		
 		//vypise obsah jednoho uzlu
 		void DisplayNode(Node* node);
