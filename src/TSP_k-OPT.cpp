@@ -21,6 +21,11 @@ CircularLinkedList::~CircularLinkedList()
 	
 	vector<Node*> nodesToDestroy;
 	
+	if (this->GetLength() == 0)
+	{
+		return;
+	}
+	
 	GetStartNode(&currentNode, &previousNode);
 	startNode = currentNode;
 	
@@ -41,6 +46,37 @@ CircularLinkedList::~CircularLinkedList()
 	}
 }
 
+bool CircularLinkedList::LoadOgdfGraph(string filename)
+{
+    this->ogdfGraphAttributes = ogdf::GraphAttributes(
+											this->ogdfEdgeWeightedGraph, 
+											ogdf::GraphAttributes::nodeGraphics | 
+											ogdf::GraphAttributes::nodeStyle |
+											ogdf::GraphAttributes::nodeLabel |
+											ogdf::GraphAttributes::edgeGraphics |
+											ogdf::GraphAttributes::edgeStyle |
+											ogdf::GraphAttributes::edgeArrow |
+											ogdf::GraphAttributes::edgeLabel |
+											ogdf::GraphAttributes::edgeArrow
+											);
+
+    if (!ogdf::GraphIO::read(this->ogdfGraphAttributes, this->ogdfEdgeWeightedGraph, filename, ogdf::GraphIO::readGML)) 
+	{
+        std::cerr << "Error loading file: " << filename << std::endl;
+        return false;
+    }
+	
+	for (ogdf::edge e: this->ogdfEdgeWeightedGraph.edges) 
+	{
+        // this->G.newEdge(e->target(), e->source(), this->G.weight(e));
+        std::cout << "Test: " << this->ogdfEdgeWeightedGraph.weight(e) << std::endl;
+    }
+	
+	
+	
+    return true;
+}
+
 //vlozi vrchol do grafu
 void CircularLinkedList::InsertNode(double positionX, double positionY)
 {
@@ -49,17 +85,20 @@ void CircularLinkedList::InsertNode(double positionX, double positionY)
 	{
 		startNode = new Node();
 		
-		startNode->positionX = positionX;
-		startNode->positionY = positionY;
+		startNode->id = listLength;
+		// startNode->positionX = positionX;
+		// startNode->positionY = positionY;
 		startNode->firstNeighbour = startNode;
 		startNode->secondNeighbour = startNode;
 	}
 	//seznam ma jeden prvek - musime spravne prevazat oba ukazatele startovniho uzlu, protoze ukazuji sami na sebe
 	else if (listLength == 1)
 	{
-		Node* newNode = new Node();		
-		newNode->positionX = positionX;
-		newNode->positionY = positionY;
+		Node* newNode = new Node();	
+		
+		newNode->id = listLength;
+		// newNode->positionX = positionX;
+		// newNode->positionY = positionY;
 		newNode->firstNeighbour = startNode;
 		newNode->secondNeighbour = startNode;
 		
@@ -71,9 +110,11 @@ void CircularLinkedList::InsertNode(double positionX, double positionY)
 	{
 		Node* tmpSecondNeighbour = startNode->secondNeighbour;
 		
-		Node* newNode = new Node();		
-		newNode->positionX = positionX;
-		newNode->positionY = positionY;
+		Node* newNode = new Node();	
+		
+		newNode->id = listLength;
+		// newNode->positionX = positionX;
+		// newNode->positionY = positionY;
 		newNode->firstNeighbour = startNode;
 		newNode->secondNeighbour = tmpSecondNeighbour;
 		
@@ -226,7 +267,7 @@ void CircularLinkedList::PerformNOptSwap (vector<Node*> &swapNodes, vector<Node*
 }
 
 //vypise obsah grafu
-void CircularLinkedList::DisplayList ()
+void CircularLinkedList::DisplayList()
 {
 	Node* startNode = NULL;
 	Node* currentNode = NULL;
@@ -413,7 +454,7 @@ bool DoesSequenceContainsRequiredConnections(vector<int> &sequence)
 		actConnectionReversed.push_back((i*2+1)%sequenceSize);
 		actConnectionReversed.push_back(i*2);
 		
-		//dvojice muye byt bud obracena nebo neobracena
+		//dvojice muze byt bud obracena nebo neobracena
 		if (DoesCircularSequenceContainsSubsequence(sequence, actConnection) == false && DoesCircularSequenceContainsSubsequence(sequence, actConnectionReversed) == false)
 		{
 			return false;
