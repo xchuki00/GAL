@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
             * -i/--input path - input graph to solve\
             * -o/--output path - output gml file\n\
             * -s/--output-svg path - output svg file");
-    int algorithmNumber = 2, count = 10;
+    int algorithmNumber = 1, count = 10;
     string path;
     string output;
     string outputSvg;
@@ -77,37 +77,39 @@ int main(int argc, char **argv) {
         g->generateCompleteGraph(path,outputSvg, count);
         return 0;
     }
-    if (algorithmNumber == 1) {
-        //doplnit zpracovani a ukladani bodu za pomoci knihovny
-        //kontrola minimalni delky grafu!
-        //zkusit valgrind na destruktor??
-        int k = 3;
+   if (algorithmNumber == 1)
+	{
+		//doplnit zpracovani a ukladani bodu za pomoci knihovny
+		//kontrola minimalni delky grafu!
+		//zkusit valgrind na destruktor??
+		int k = 3;
+		
+		CircularLinkedList *graph = new CircularLinkedList();
+	
+		graph->LoadOgdfGraph("src/10-nodes.gml");
+	
+		// graph->InsertNode(10,60);
+		// graph->InsertNode(80,50);
+		// graph->InsertNode(100,10);
+		// graph->InsertNode(80,20);
+		// graph->InsertNode(120,30);
+		// graph->InsertNode(110,60);
+		// graph->InsertNode(20,10);
+		// graph->InsertNode(40,10);
+		// graph->InsertNode(60,10);
+		// graph->InsertNode(40,60);
+		// graph->InsertNode(60,70);
 
-        CircularLinkedList *graph = new CircularLinkedList();
+		// std::cout << "\nInput graph:\n";
+		// graph->DisplayList();
+		
+		// kOPT(k, graph);
 
-        graph->InsertNode(10, 60);
-        graph->InsertNode(80, 50);
-        graph->InsertNode(100, 10);
-        graph->InsertNode(80, 20);
-        graph->InsertNode(120, 30);
-        graph->InsertNode(110, 60);
-        graph->InsertNode(20, 10);
-        graph->InsertNode(40, 10);
-        graph->InsertNode(60, 10);
-        graph->InsertNode(40, 60);
-
-        graph->InsertNode(60, 70);
-
-        std::cout << "\nInput graph:\n";
-        graph->DisplayList();
-
-        kOPT(k, graph);
-
-        std::cout << "\nOutput graph:\n";
-        graph->DisplayList();
-
-        delete graph;
-    } else {
+		// std::cout << "\nOutput graph:\n";
+		// graph->DisplayList();
+		
+		delete graph;
+	} else {
         TSP_DoubleTree *t = new TSP_DoubleTree();
         t->load(path);
         t->solveTSD();
