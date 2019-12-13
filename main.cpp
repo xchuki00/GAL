@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
             * -o/--output path - output gml file\n\
             * -s/--output-svg path - output svg file");
     int algorithmNumber = 1, count = 10;
-	int k = 2;
+    int k = 2;
     string path;
     string output;
     string outputSvg;
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
             std::string value(argv[i]);
             outputSvg = value;
         }
-		if (s == "-k") {
+        if (s == "-k") {
             i++;
             std::string value(argv[i]);
             k = std::stoi(value);
@@ -79,82 +79,75 @@ int main(int argc, char **argv) {
             return 0;
         }
     }
-	
-	
+
+
     if (generate) {
         auto g = new GraphGenerator();
-        g->generateCompleteGraph(path,outputSvg, count);
+        g->generateCompleteGraph(path, outputSvg, count);
         return 0;
     }
-	
-	
-	if (algorithmNumber == 1)
-	{
-		CircularLinkedList *graph = new CircularLinkedList();
-		
-		if (!graph->LoadOgdfGraph(path))
-		{
-			return -1;
-		}
-		
-		if (!kOPT(k, graph))
-		{
-			return -1;
-		}
 
-		if (!graph->SaveOgdfGraphSVG(outputSvg))
-		{
-			return -1;
-		}
-		
-		if (!graph->SaveOgdfGraphGML(output))
-		{
-			return -1;
-		}
-		
-		delete graph;
-	}
-	else if (algorithmNumber == 2)
-	{
+
+    if (algorithmNumber == 1) {
+        CircularLinkedList *graph = new CircularLinkedList();
+
+        if (!graph->LoadOgdfGraph(path)) {
+            return -1;
+        }
+        if (!kOPT(k, graph)) {
+            return -1;
+        }
+        if (output.length() > 0) {
+            if (!graph->SaveOgdfGraphGML(output)) {
+                return -1;
+            }
+        }
+        if (outputSvg.length() > 0) {
+
+            if (!graph->SaveOgdfGraphSVG(outputSvg)) {
+                return -1;
+            }
+        }
+
+        delete graph;
+    } else if (algorithmNumber == 2) {
         TSP_DoubleTree *t = new TSP_DoubleTree();
         t->load(path);
-       std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         t->solveTSD();
-       std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-       std::cout << "TIME:" << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << std::endl;
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        std::cout << "TIME: "<< std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << "[ns]"
+                  << std::endl;
 
-       if (output.length() > 0) {
+        if (output.length() > 0) {
             t->save(output);
         }
         if (outputSvg.length() > 0) {
             t->saveSvg(outputSvg);
         }
+    } else if (algorithmNumber == 3) {
+        CircularLinkedList *graph = new CircularLinkedList();
+
+        if (!graph->LoadOgdfGraph(path)) {
+            return -1;
+        }
+
+        if (!BruteForce(graph)) {
+            return -1;
+        }
+        if (output.length() > 0) {
+            if (!graph->SaveOgdfGraphGML(output)) {
+                return -1;
+            }
+        }
+        if (outputSvg.length() > 0) {
+
+            if (!graph->SaveOgdfGraphSVG(outputSvg)) {
+                return -1;
+            }
+        }
     }
-	else if (algorithmNumber == 3)
-	{
-		CircularLinkedList *graph = new CircularLinkedList();
-		
-		if (!graph->LoadOgdfGraph(path))
-		{
-			return -1;
-		}
 
-		if (!BruteForce(graph))
-		{
-			return -1;
-		}
-
-		if (!graph->SaveOgdfGraphSVG(outputSvg))
-		{
-			return -1;
-		}
-		
-		if (!graph->SaveOgdfGraphGML(output))
-		{
-			return -1;
-		}
-	}
-	
     return 0;
 }
 

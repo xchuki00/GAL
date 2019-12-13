@@ -682,8 +682,10 @@ void InitNestedLoop(CircularLinkedList* graph, vector<Node*> &swapNodes, vector<
 }
 
 bool kOPT(int k, CircularLinkedList* graph)
-{	
-	//pocet vrcholu musi byt minimalne 2*k a vetsi nez 1
+{
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+    //pocet vrcholu musi byt minimalne 2*k a vetsi nez 1
 	if (graph->GetLength() < k*2 || k < 2) 
 	{
         std::cerr << "Parameter k needs graph with at least 2*k vertices and be bigger than 1!" << std::endl;
@@ -857,8 +859,10 @@ bool kOPT(int k, CircularLinkedList* graph)
 	std::chrono::steady_clock::time_point end2 = std::chrono::steady_clock::now();
 	std::cout << "TIME2: " << std::chrono::duration_cast<std::chrono::nanoseconds> (end2 - begin2).count() << "[ns]" << std::endl;
 	std::cout << "TIME3: " << cycleCounter << "[ns]" << std::endl;
-	
-	//nakonec pretransformujeme graf do ogdf
+    std::cout << "TIME: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin).count() << "[ns]"
+              << std::endl;
+
+    //nakonec pretransformujeme graf do ogdf
 	graph->PrepareOgdfOutputKOPT();
 		
 	return true;
