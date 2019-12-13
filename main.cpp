@@ -1,6 +1,7 @@
 #include "include/TSP_DoubleTree.h"
 #include "include/GraphGenerator.h"
 #include "include/TSP_k-OPT.h"
+#include <chrono>
 
 /**
  *
@@ -110,10 +111,16 @@ int main(int argc, char **argv) {
 		
 		delete graph;
 	} else {
+
+
         TSP_DoubleTree *t = new TSP_DoubleTree();
         t->load(path);
+       std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         t->solveTSD();
-        if (output.length() > 0) {
+       std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+       std::cout << "TIME:" << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << std::endl;
+
+       if (output.length() > 0) {
             t->save(output);
         }
         if (outputSvg.length() > 0) {
