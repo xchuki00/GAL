@@ -1,6 +1,6 @@
 #include "include/TSP_DoubleTree.h"
 #include "include/GraphGenerator.h"
-#include "include/TSP_k-OPT.h"
+#include "include/TSP_k-OPT_Brute_force.h"
 #include <chrono>
 
 /**
@@ -24,11 +24,13 @@ int main(int argc, char **argv) {
             * -c/--node-count X - generated graph will have X nodes\n\
             * -s/--output-svg path - save also as svg\
             *\n\
-            * -a/--algorithm [1,2] - solve TSP by algorithm 1(k-OPT) or 2(DoubleTree)\n\
+            * -a/--algorithm [1,2,3] - solve TSP by algorithm 1(k-OPT) or 2(DoubleTree) or 3(Brute-force)\n\
+            * -k - unsigned int parameter needed for k-OPT algorithm\n\
             * -i/--input path - input graph to solve\
             * -o/--output path - output gml file\n\
             * -s/--output-svg path - output svg file");
     int algorithmNumber = 1, count = 10;
+	int k = 2;
     string path;
     string output;
     string outputSvg;
@@ -67,52 +69,53 @@ int main(int argc, char **argv) {
             std::string value(argv[i]);
             outputSvg = value;
         }
+		if (s == "-k") {
+            i++;
+            std::string value(argv[i]);
+            k = std::stoi(value);
+        }
         if (s == "-h" || s == "--help") {
             cout << help << endl;
             return 0;
         }
-
     }
+	
+	
     if (generate) {
         auto g = new GraphGenerator();
         g->generateCompleteGraph(path,outputSvg, count);
         return 0;
     }
-   if (algorithmNumber == 1)
+	
+	
+	if (algorithmNumber == 1)
 	{
-		//doplnit zpracovani a ukladani bodu za pomoci knihovny
-		//kontrola minimalni delky grafu!
-		//zkusit valgrind na destruktor??
-		int k = 3;
-		
 		CircularLinkedList *graph = new CircularLinkedList();
-	
-		graph->LoadOgdfGraph(path);
-	
-		// graph->InsertNode(10,60);
-		// graph->InsertNode(80,50);
-		// graph->InsertNode(100,10);
-		// graph->InsertNode(80,20);
-		// graph->InsertNode(120,30);
-		// graph->InsertNode(110,60);
-		// graph->InsertNode(20,10);
-		// graph->InsertNode(40,10);
-		// graph->InsertNode(60,10);
-		// graph->InsertNode(40,60);
-		// graph->InsertNode(60,70);
-
-		// std::cout << "\nInput graph:\n";
-		// graph->DisplayList();
 		
-		// kOPT(k, graph);
+		if (!graph->LoadOgdfGraph(path))
+		{
+			return -1;
+		}
+		
+		if (!kOPT(k, graph))
+		{
+			return -1;
+		}
 
-		// std::cout << "\nOutput graph:\n";
-		// graph->DisplayList();
+		if (!graph->SaveOgdfGraphSVG(outputSvg))
+		{
+			return -1;
+		}
+		
+		if (!graph->SaveOgdfGraphGML(output))
+		{
+			return -1;
+		}
 		
 		delete graph;
-	} else {
-
-
+	}
+	else if (algorithmNumber == 2)
+	{
         TSP_DoubleTree *t = new TSP_DoubleTree();
         t->load(path);
        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -127,5 +130,45 @@ int main(int argc, char **argv) {
             t->saveSvg(outputSvg);
         }
     }
+	else if (algorithmNumber == 3)
+	{
+		CircularLinkedList *graph = new CircularLinkedList();
+		
+		if (!graph->LoadOgdfGraph(path))
+		{
+			return -1;
+		}
+
+		if (!BruteForce(graph))
+		{
+			return -1;
+		}
+
+		if (!graph->SaveOgdfGraphSVG(outputSvg))
+		{
+			return -1;
+		}
+		
+		if (!graph->SaveOgdfGraphGML(output))
+		{
+			return -1;
+		}
+	}
+	
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
