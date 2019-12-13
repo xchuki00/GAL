@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
 		
 		CircularLinkedList *graph = new CircularLinkedList();
 	
-		graph->LoadOgdfGraph("src/10-nodes.gml");
+		graph->LoadOgdfGraph(path);
 	
 		// graph->InsertNode(10,60);
 		// graph->InsertNode(80,50);

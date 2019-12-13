@@ -50,14 +50,6 @@ void GraphGenerator::generateCompleteGraph(string fileName, string svgFile, int 
         GA.label(v) = to_string(v->index());
     }
 
-//    FMMMLayout fmmm;
-//
-//    fmmm.useHighLevelOptions(true);
-//    fmmm.unitEdgeLength(44.0);
-//    fmmm.newInitialPlacement(true);
-//    fmmm.qualityVersusSpeed(FMMMOptions::QualityVsSpeed::GorgeousAndEfficient);
-//
-//    fmmm.call(GA);
     SugiyamaLayout SL; //Compute a hierarchical drawing of G (using SugiyamaLayout)
     SL.setRanking(new OptimalRanking);
     SL.setCrossMin(new MedianHeuristic);

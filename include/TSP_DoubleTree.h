@@ -24,6 +24,7 @@ public:
     EdgeWeightedGraph<float> G;
     GraphAttributes GA;
     std::vector<node> EC;
+    std::vector<edge> mst;
     int MSTIndex = 0;
     TSP_DoubleTree();
     bool load(string filename);
@@ -33,7 +34,6 @@ public:
     void solveTSD();
     bool save(string filename);
     bool saveSvg(string filename);
-
 };
 
 
