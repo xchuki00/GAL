@@ -10,6 +10,7 @@
  * -c X - generated graph will have X nodes
  *
  * -a [1,2] - solve TSP by algorithm 1(k-OPT) or 2(DoubleTree)
+ * -k - unsigned int parameter needed for k-OPT algorithm
  * -i path - intput graph to solve
  * -o path - output gml file
  * -s path - output svg file

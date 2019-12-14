@@ -20,6 +20,6 @@ file(GLOB main_SRC
         "./src/*.cpp"
         )
 
-add_executable(main main.cpp ${main_SRC})
-target_include_directories(main PRIVATE ${OGDF_INCLUDE_DIRS} ./include ./src)
-target_link_libraries(main OGDF)
+add_executable(tsp main.cpp ${main_SRC})
+target_include_directories(tsp PRIVATE ${OGDF_INCLUDE_DIRS} ./include ./src)
+target_link_libraries(tsp OGDF)

@@ -140,7 +140,7 @@ void TSP_DoubleTree::minimumSpanningTree() {
 }
 
 /**
- * složitost prim alg + e
+ * složitost n+m+2*(n-1)*
  */
 void TSP_DoubleTree::eulerianWalk() {
     auto A = std::map<int, std::vector<node>>();

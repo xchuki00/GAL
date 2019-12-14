@@ -40,8 +40,6 @@ void GraphGenerator::generateCompleteGraph(string fileName, string svgFile, int 
 
     for (node v : G.nodes) {
 
-//        GA.height(v) = 20.0*n; // set the height to 20.0
-//        GA.width(v) = 20.0*n; // set the width to 40.0
         GA.shape(v) = ogdf::Shape::Ellipse;
         GA.strokeWidth(v) = 1;
         GA.strokeColor(v) = Color::Name::Black;

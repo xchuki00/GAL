@@ -1,9 +1,8 @@
 #!/bin/bash
 #./runTest.sh out2.csv
 echo "Alg;N;Price;Time;K;Time1;Time2;Time2;" >$1
-#for ((i = $1; $i <= $2; i = $i + 1)); do
 for file in Graphs/*.gml; do
-  out=$(./main -a 2 -i $file)
+  out=$(./tsp -a 2 -i $file)
   a=($out)
   price=0
   time=0
@@ -22,10 +21,9 @@ for file in Graphs/*.gml; do
   file=${file//"Graphs/"/""}
   echo "DT;$file;$price;$time;;;;;" >>$1
 done
-for ((k = 2; $k <= 5; k = $k + 1)); do
-  #  for ((i = $1; $i <= $2; i = $i + 1)); do
+for ((k = 2; $k <= 6; k = $k + 1)); do
   for file in Graphs/*.gml; do
-    out=$(./main -a 1 -k $k -i $file)
+    out=$(./tsp -a 1 -k $k -i $file)
     a=($out)
     price=0
     time=0
@@ -58,12 +56,11 @@ for ((k = 2; $k <= 5; k = $k + 1)); do
     echo "k-OPT;$file;$price;$time;$k;$time1;$time2;$time3;" >>$1
   done
 done
-#for ((i = $1; $i <= $2; i = $i + 1)); do
 for file in Graphs/*.gml; do
   n=${file//"-nodes.gml"/""}
   n=${n//"Graphs/"/""}
   if (($n <= 14)); then
-    out=$(./main -a 3 -i $file)
+    out=$(./tsp -a 3 -i $file)
     a=($out)
     price=0
     time=0

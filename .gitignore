@@ -3,6 +3,7 @@
 *.a
 *.svg
 *.jpg
+tsp
 main
 build
 ogdf
