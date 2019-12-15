@@ -76,17 +76,7 @@ bool CircularLinkedList::LoadOgdfGraph(string filename)
         adjacencyMatrix.at(sourceIndex).at(targetIndex) = stod(this->ogdfGraphAttributes.label(e));
 		adjacencyMatrix.at(targetIndex).at(sourceIndex) = stod(this->ogdfGraphAttributes.label(e));
     }
-	
-	//debug vypis
-	// for (int i = 0; i < listLength; i++)
-	// {
-		// for (int j = 0; j < listLength; j++)
-		// {
-			// cout << adjacencyMatrix.at(i).at(j) << ", ";
-		// }
-		// cout << "\n";
-	// }
-	
+
     return true;
 }
 
@@ -99,13 +89,7 @@ void CircularLinkedList::PrepareOgdfOutputKOPT()
 	{
 		this->ogdfEdgeWeightedGraph.delEdge(this->ogdfEdgeWeightedGraph.firstEdge());
 	}
-	
-	//vypis debug hran
-	/*for (ogdf::edge e: this->ogdfEdgeWeightedGraph.edges) 
-	{
-		cout << e << ", ";
-    }*/
-	
+
 	//projedeme vsechny hrany z nasi struktury a vlozime je do ogdf grafu se spravnymi labely
 	ogdf::edge currentEdge;
 	double currentWeight;
@@ -114,9 +98,7 @@ void CircularLinkedList::PrepareOgdfOutputKOPT()
 	Node* currentNode = NULL;
 	Node* previousNode = NULL;
 	
-	//DELETE
 	double currentBestPathMetric = 0;
-	
 	
 	GetStartNode(&currentNode, &previousNode);
 	startNode = currentNode;
@@ -140,7 +122,6 @@ void CircularLinkedList::PrepareOgdfOutputKOPT()
 		GetNextNode (&currentNode, &previousNode);			
 	}
 	
-	//DELETE
 	std::cout<<"PRICE: "<< currentBestPathMetric <<std::endl;
 	
 	this->ogdfGraphAttributes.directed() = true;
@@ -708,15 +689,8 @@ bool kOPT(int k, CircularLinkedList* graph)
 	//hrana ma jeden citac
 	swapNodesPosition.resize(k);
 	
-	//DELETE
-	std::chrono::steady_clock::time_point begin1 = std::chrono::steady_clock::now();
-	
 	//vygenerujeme vsechny permutace, ktere reprezentuji validni prohozeni hran
 	GenerateAllValidSwaps(validPermutations, k);
-	
-	//DELETE
-	std::chrono::steady_clock::time_point end1 = std::chrono::steady_clock::now();
-	std::cout << "TIME1: " << std::chrono::duration_cast<std::chrono::nanoseconds> (end1 - begin1).count() << "[ns]" << std::endl;
 	
 	//zacneme generovat vsechny n-tice
 	
@@ -732,16 +706,9 @@ bool kOPT(int k, CircularLinkedList* graph)
 	//cena cesty se vylepsila
 	bool pathImproved;
 	
-	//DELETE
-	std::chrono::steady_clock::time_point begin2 = std::chrono::steady_clock::now();
-	int cycleCounter = 0;
-	
 	//budeme provadet prohozy, dokud dokazeme najit nejaky prohoz, ktery vylepsi cenu
 	while(true)
-	{
-		//DELETE
-		cycleCounter++;
-		
+	{		
 		//nainicalizujeme vsechny cykly na pocatecni hodnoty
 		for (int i = 0; i < k; i++)
 		{
@@ -855,12 +822,8 @@ bool kOPT(int k, CircularLinkedList* graph)
 		}
 	}
 	
-	//DELETE
-	std::chrono::steady_clock::time_point end2 = std::chrono::steady_clock::now();
-	std::cout << "TIME2: " << std::chrono::duration_cast<std::chrono::nanoseconds> (end2 - begin2).count() << "[ns]" << std::endl;
-	std::cout << "TIME3: " << cycleCounter << "[ns]" << std::endl;
-    std::cout << "TIME: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin).count() << "[ns]"
-              << std::endl;
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "TIME: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << "[ns]" << std::endl;
 
     //nakonec pretransformujeme graf do ogdf
 	graph->PrepareOgdfOutputKOPT();
@@ -870,7 +833,6 @@ bool kOPT(int k, CircularLinkedList* graph)
 
 bool BruteForce(CircularLinkedList* graph)
 {
-	//DELETE
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	
 	//kdyz mame 6 vrcholu - tak ten jeden muzeme zafixovat protoze by jen reprezentoval ruzne rotace grafu a ty nas nezajimaji
@@ -907,42 +869,36 @@ bool BruteForce(CircularLinkedList* graph)
 	//3 znamena, ze uz  nejsou k dispozici dalsi
 	while(retValue != 3)
 	{
-		//odfiltrujeme zpetne permutace
-		if (actPermutation.at(0) < actPermutation.at(permutationLength-1))
+		//aktualni metrika je nula
+		currentPathMetric = 0;
+		
+		//doplnime 1
+		actPermutation.push_back(1);
+		
+		//spocitame delku permutace
+		for (i = 0; i < permutationLength; i++)
 		{
-			//aktualni metrika je nula
-			currentPathMetric = 0;
-			
-			//doplnime 1
-			actPermutation.push_back(1);
-			
-			//spocitame delku permutace
-			for (i = 0; i < permutationLength; i++)
-			{
-				firstNode = graph->nodeList.at((actPermutation.at(i)-1));
-				secondNode = graph->nodeList.at((actPermutation.at(i+1)-1));
-				
-				currentPathMetric += GetMetricFromAdjacencyMatrix(graph, firstNode, secondNode);
-			}
-			
 			firstNode = graph->nodeList.at((actPermutation.at(i)-1));
-			secondNode = graph->nodeList.at((actPermutation.at(0)-1));
+			secondNode = graph->nodeList.at((actPermutation.at(i+1)-1));
 			
 			currentPathMetric += GetMetricFromAdjacencyMatrix(graph, firstNode, secondNode);
-			
-			//pokud je lepsi prepiseme
-			if (currentPathMetric < currentBestPathMetric)
-			{
-				currentBestPathMetric = currentPathMetric;
-				VectorDeepCopy(currentBestPermutation, actPermutation);
-			}
-			
+		}
+		
+		firstNode = graph->nodeList.at((actPermutation.at(i)-1));
+		secondNode = graph->nodeList.at((actPermutation.at(0)-1));
+		
+		currentPathMetric += GetMetricFromAdjacencyMatrix(graph, firstNode, secondNode);
+		
+		//pokud je lepsi prepiseme
+		if (currentPathMetric < currentBestPathMetric)
+		{
+			currentBestPathMetric = currentPathMetric;
+			VectorDeepCopy(currentBestPermutation, actPermutation);
 		}
 		
 		retValue = permutationGenerator.ReturnNextPermutation(actPermutation);
 	}
 	
-	//DELETE
 	std::cout << "PRICE: "<< currentBestPathMetric << std::endl;
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "TIME: " << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << std::endl;
