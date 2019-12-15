@@ -7,8 +7,6 @@ for file in Graphs/*.gml; do
   price=0
   time=0
   for index in "${!a[@]}"; do
-    #    echo "$index ${a[index]}"
-    #echo ${a[index]};
     if [ ${a[index]} == "PRICE:" ]; then
       price=${a[index + 1]}
     fi
@@ -23,43 +21,45 @@ for file in Graphs/*.gml; do
 done
 for ((k = 2; $k <= 6; k = $k + 1)); do
   for file in Graphs/*.gml; do
-    out=$(./tsp -a 1 -k $k -i $file)
-    a=($out)
-    price=0
-    time=0
-    time1=0
-    time2=0
-    time3=0
-    for index in "${!a[@]}"; do
-      if [ ${a[index]} == "PRICE:" ]; then
-        price=${a[index + 1]}
-      fi
-      if [ ${a[index]} == "TIME:" ]; then
-        time=${a[index + 1]}
-        time=${time//"[ns]"/""}
-      fi
-      if [ ${a[index]} == "TIME1:" ]; then
-        time1=${a[index + 1]}
-        time1=${time1//"[ns]"/""}
-      fi
-      if [ ${a[index]} == "TIME2:" ]; then
-        time2=${a[index + 1]}
-        time2=${time2//"[ns]"/""}
-      fi
-      if [ ${a[index]} == "TIME3:" ]; then
-        time3=${a[index + 1]}
-        time3=${time3//"[ns]"/""}
-      fi
-    done
-    file=${file//"-nodes.gml"/""}
-    file=${file//"Graphs/"/""}
-    echo "k-OPT;$file;$price;$time;$k;$time1;$time2;$time3;" >>$1
+    n=${file//"-nodes.gml"/""}
+    n=${n//"Graphs/"/""}
+    if (($n <= 90)); then
+      out=$(timeout 420 ./tsp -a 1 -k $k -i $file)
+      a=($out)
+      price=0
+      time=0
+      time1=0
+      time2=0
+      time3=0
+      for index in "${!a[@]}"; do
+        if [ ${a[index]} == "PRICE:" ]; then
+          price=${a[index + 1]}
+        fi
+        if [ ${a[index]} == "TIME:" ]; then
+          time=${a[index + 1]}
+          time=${time//"[ns]"/""}
+        fi
+        if [ ${a[index]} == "TIME1:" ]; then
+          time1=${a[index + 1]}
+          time1=${time1//"[ns]"/""}
+        fi
+        if [ ${a[index]} == "TIME2:" ]; then
+          time2=${a[index + 1]}
+          time2=${time2//"[ns]"/""}
+        fi
+        if [ ${a[index]} == "TIME3:" ]; then
+          time3=${a[index + 1]}
+          time3=${time3//"[ns]"/""}
+        fi
+      done
+      echo "k-OPT;$n;$price;$time;$k;$time1;$time2;$time3;" >>$1
+    fi
   done
 done
 for file in Graphs/*.gml; do
   n=${file//"-nodes.gml"/""}
   n=${n//"Graphs/"/""}
-  if (($n <= 14)); then
+  if (($n <= 10)); then
     out=$(./tsp -a 3 -i $file)
     a=($out)
     price=0
